@@ -23,7 +23,9 @@ int compute_fibo (int n1, int n2) {
 }
 
 int write_fibo (int fibnum) {
-    // JANREN
+    FILE* in = fopen("fibo.txt", "a");
+    frprintf(in, "\n" + fibnum);
+    fclose(in);
 }
 
 int fibo (void) {
