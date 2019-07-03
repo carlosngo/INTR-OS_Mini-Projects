@@ -19,15 +19,17 @@ int read_file (int* n1, int* n2) {
 }
 
 int compute_fibo (int n1, int n2) {
-    // JOHANNA
+    return n1 + n2;
 }
 
-int write_fibo (int n1, int n2) {
+int write_fibo (int fibnum) {
     // JANREN
 }
 
 int fibo (void) {
-    // JOHANNA
+    int a, b;
+    read_file(&a, &b);
+    write_fibo(compute_fibo(a, b));
 }
 
 int main (void) {
