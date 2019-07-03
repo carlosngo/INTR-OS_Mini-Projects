@@ -3,7 +3,7 @@
 
 int read_file (int* n1, int* n2);
 int compute_fibo (int n1, int n2);
-int write_fibo (int n1, int n2);
+int write_fibo (int fibnum);
 int fibo (void);
 
 int read_file (int* n1, int* n2) {
