@@ -24,7 +24,7 @@ int compute_fibo (int n1, int n2) {
 
 int write_fibo (int fibnum) {
     FILE* in = fopen("fibo.txt", "a");
-    frprintf(in, "\n%d", fibnum);
+    fprintf(in, "\n%d", fibnum);
     fclose(in);
 }
 
