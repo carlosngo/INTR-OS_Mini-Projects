@@ -8,13 +8,13 @@ int fibo (void);
 
 int read_file (int* n1, int* n2) {
     FILE* in = fopen("fibo.txt", "r");
-    int a, b, c, d;
-    while (fscanf(in, "%d%d", &a, &b) == 2) {
-        c = a;
-        d = b;
+    int a, b, c;
+    while (fscanf(in, "%d", &a) == 1) {
+        c = b;
+        b = a;
     }
-    *n1 = c;
-    *n2 = d;
+    *n1 = b;
+    *n2 = c;
     fclose(in);
 }
 
@@ -38,7 +38,7 @@ int main (void) {
      int n;
      fscanf(stdin, "%d", &n);
      fork();
-     for (int i = 1; i < n; i++) {
+     for (int i = 1; i <= n; i++) {
          fibo();
      }
      return 0;
