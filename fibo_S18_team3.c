@@ -1,15 +1,15 @@
 #include <stdio.h>
 #include <unistd.h>
 
-int read_file (int* n1, int* n2);
-int compute_fibo (int n1, int n2);
-int write_fibo (int fibnum);
-int fibo (void);
+ll read_file (ll* n1, ll* n2);
+ll compute_fibo (ll n1, ll n2);
+ll write_fibo (ll fibnum);
+ll fibo (void);
 
-int read_file (int* n1, int* n2) {
+ll read_file (ll* n1, ll* n2) {
     FILE* in = fopen("fibo.txt", "r");
-    int a, b, c;
-    while (fscanf(in, "%d", &a) == 1) {
+    ll a, b, c;
+    while (fscanf(in, "%lld", &a) == 1) {
         c = b;
         b = a;
     }
@@ -18,27 +18,27 @@ int read_file (int* n1, int* n2) {
     fclose(in);
 }
 
-int compute_fibo (int n1, int n2) {
+ll compute_fibo (ll n1, ll n2) {
     return n1 + n2;
 }
 
-int write_fibo (int fibnum) {
+ll write_fibo (ll fibnum) {
     FILE* in = fopen("fibo.txt", "a");
-    fprintf(in, "%d\n", fibnum);
+    fprintf(in, "%lld\n", fibnum);
     fclose(in);
 }
 
-int fibo (void) {
-    int a, b;
+ll fibo (void) {
+    ll a, b;
     read_file(&a, &b);
     write_fibo(compute_fibo(a, b));
 }
 
-int main (void) {
-     int n;
-     fscanf(stdin, "%d", &n);
+ll main (void) {
+     ll n;
+     fscanf(stdin, "%lld", &n);
      fork();
-     for (int i = 1; i <= n; i++) {
+     for (ll i = 1; i <= n; i++) {
          fibo();
      }
      return 0;
