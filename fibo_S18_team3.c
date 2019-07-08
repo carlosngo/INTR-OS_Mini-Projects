@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <unistd.h>
+typedef long long ll;
 
 ll read_file (ll* n1, ll* n2);
 ll compute_fibo (ll n1, ll n2);
