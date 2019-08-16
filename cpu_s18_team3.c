@@ -52,13 +52,43 @@ Programmer: Johanna Lim, 11726008
 This function takes in the list of processes and writes the simulated execution order as well as the AWT in a file.
 */
 void print_fcfs(process list[], int numOfProcesses) {
-// sort the list
-// for each struct get char then concant it duration times
-//get new string
-//for each char in list, get strchr - arrival time and add them all
-// divide the total time by the no of structs
-//write string
-// write awt
+    int i, j, indexCtr;
+    int timeFinished[MAX_NUM_OF_PROCESSES];
+    int waiting[MAX_NUM_OF_PROCESSES];
+    process temp;
+    // Copy contents of list to processes
+    process processes[MAX_NUM_OF_PROCESSES];
+    for (i = 0; i < numOfProcesses; i++) {
+        processes[i] = list[i];
+    }
+    fprintf(stdout, "*FCFS*\n");
+    // Sort the processes according to time of arrival
+    for (i = 0; i < numOfProcesses; i++)
+    {
+        for (j = 0; j < (numOfProcesses); j++)
+        {
+            if (processes[j].arrival > processes[j + 1].arrival)
+            {
+                temp = processes[j];
+                processes[j] = processes[j + 1];
+                processes[j + 1] = temp;
+            } 
+        }
+    }
+    // Write the simulated execution order to the file
+    for (i = 0; i < numOfProcesses; i++){
+        for (j = 0; j < processes[i].remaining ; j++){
+             fprintf(stdout, "%c", processes[i].p_id);
+        }
+    }
+    // Compute for the AWT
+    timeFinished[0] = processes[0].arrival + processes[0].remaining;
+    waiting[0] = 0;
+    for (i = 1; i < numOfProcesses; i++){
+        timeFinished[i] = timeFinished[i-1] + processes[i].remaining;
+        waiting[i] = timeFinished[i-1] - processes[i].arrival;
+    }
+    fprintf(stdout, "\nAWT = %llf\n\n", compute_avg(waiting, numOfProcesses));
 }
 
 void print_sjf(process list[], int numOfProcesses) {
