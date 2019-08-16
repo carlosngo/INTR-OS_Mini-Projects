@@ -1,6 +1,8 @@
 #include <stdio.h>
 
 #define MAX_NUM_OF_PROCESSES 5
+#define FALSE 0
+#define TRUE 1
 
 typedef struct {
     char p_id;
@@ -13,6 +15,7 @@ void print_fcfs(process list[], int numOfProcesses);
 void print_sjf(process list[], int numOfProcesses);
 void print_srtf(process list[], int numOfProcesses);
 void print_rr(process list[], int q, int numOfProcesses);
+double compute_avg(int arr[], int n);
 
 int
 main() {
@@ -20,11 +23,6 @@ main() {
     int q;
     int numOfProcesses = 0;
     read_processes(list, &q, &numOfProcesses);
-    int i;
-    for (i = 0; i < numOfProcesses; i++) {
-        fprintf(stdout, "Process %c will arrive at time=%d and has %d time remaining\n", list[i].p_id, list[i].arrival, list[i].remaining);
-    }
-    fprintf(stdout, "q = %d\n", q);
     print_fcfs(list, numOfProcesses);
     print_sjf(list, numOfProcesses);
     print_srtf(list, numOfProcesses);
@@ -64,13 +62,82 @@ void print_fcfs(process list[], int numOfProcesses) {
 }
 
 void print_sjf(process list[], int numOfProcesses) {
+    int time = 0;
+    int i, j;
+    int waiting[MAX_NUM_OF_PROCESSES] = {0};
+    // Copy contents of list to processes
+    process processes[MAX_NUM_OF_PROCESSES];
+    for (i = 0; i < numOfProcesses; i++) {
+        processes[i] = list[i];
+    }
+    fprintf(stdout, "*SJF*\n");
+    while (1) {
+        char nextIndex = -1;
+        int shortest = 1e9;
+        int finished = TRUE;
+        for (i = 0; i < numOfProcesses; i++) { // classic find min
+            if (processes[i].remaining > 0) {
+                finished = FALSE; // found a process that's in the queue
+                if (processes[i].arrival <= time && processes[i].remaining < shortest) {
+                    nextIndex = i;
+                    shortest = processes[i].remaining;
+                }
+            }
+        }
+        if (finished) break;
+        processes[nextIndex].remaining = 0;
+        for (i = 0; i < shortest; i++) {
+            fprintf(stdout, "%c", processes[nextIndex].p_id);
+        }
+        waiting[nextIndex] += time - processes[nextIndex].arrival;
+        time += shortest;
+    }
+    fprintf(stdout, "\nAWT = %llf\n\n", compute_avg(waiting, numOfProcesses));
     
 }
 
 void print_srtf(process list[], int numOfProcesses) {
-    
+    int time = 0;
+    int i, j;
+    process processes[MAX_NUM_OF_PROCESSES];
+    for (i = 0; i < numOfProcesses; i++) {
+        processes[i] = list[i];
+    }
+    int waiting[MAX_NUM_OF_PROCESSES] = {0};
+    fprintf(stdout, "*SRTF*\n");
+    while (1) {
+        int nextIndex = -1;
+        int shortest = 1e9;
+        int finished = TRUE;
+        for (i = 0; i < numOfProcesses; i++) { // classic find min
+            if (processes[i].remaining > 0) {
+                finished = FALSE;
+                if (processes[i].arrival <= time && processes[i].remaining < shortest) {
+                    nextIndex = i;
+                    shortest = processes[i].remaining;
+                }
+            }
+        }
+
+        if (finished) break;
+        fprintf(stdout, "%c", processes[nextIndex].p_id);
+        processes[nextIndex].remaining--;
+        waiting[nextIndex] += time - processes[nextIndex].arrival;
+        time++;
+        processes[nextIndex].arrival = time;
+    }
+    fprintf(stdout, "\nAWT = %llf\n\n", compute_avg(waiting, numOfProcesses));
 }
 
 void print_rr(process list[], int q, int numOfProcesses) {
     
+}
+
+double compute_avg(int arr[], int n) {
+    double avg = 0;
+    int i;
+    for (i = 0; i < n; i++) {
+        avg += arr[i];
+    }
+    return avg / n;
 }
