@@ -14,11 +14,6 @@ void print_fcfs(process list[]);
 void print_sjf(process list[]);
 void print_srtf(process list[]);
 void print_rr(process list[], int q);
-// void write_to_file();
-
-// void write_to_file(){
-
-// }
 
 int
 main() {
@@ -36,6 +31,10 @@ void read_processes(process list[], int* q) {
 
 }
 
+/*
+Programmer: Johanna Lim, 11726008
+This function takes in the list of processes and writes the simulated execution order as well as the AWT in a file.
+*/
 void print_fcfs(process list[]) {
 
 }
