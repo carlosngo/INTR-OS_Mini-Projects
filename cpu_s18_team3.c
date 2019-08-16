@@ -14,6 +14,11 @@ void print_fcfs(process list[]);
 void print_sjf(process list[]);
 void print_srtf(process list[]);
 void print_rr(process list[], int q);
+// void write_to_file();
+
+// void write_to_file(){
+
+// }
 
 int
 main() {
