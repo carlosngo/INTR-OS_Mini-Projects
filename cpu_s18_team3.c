@@ -36,7 +36,13 @@ Programmer: Johanna Lim, 11726008
 This function takes in the list of processes and writes the simulated execution order as well as the AWT in a file.
 */
 void print_fcfs(process list[]) {
-
+// sort the list
+// for each struct get char then concant it duration times
+//get new string
+//for each char in list, get strchr - arrival time and add them all
+// divide the total time by the no of structs
+//write string
+// write awt
 }
 
 void print_sjf(process list[]) {
