@@ -63,12 +63,9 @@ void print_fcfs(process list[], int numOfProcesses) {
     }
     fprintf(stdout, "*FCFS*\n");
     // Sort the processes according to time of arrival
-    for (i = 0; i < numOfProcesses; i++)
-    {
-        for (j = 0; j < (numOfProcesses); j++)
-        {
-            if (processes[j].arrival > processes[j + 1].arrival)
-            {
+    for (i = 0; i < numOfProcesses; i++){
+        for (j = 0; j < (numOfProcesses); j++){
+            if (processes[j].arrival > processes[j + 1].arrival){
                 temp = processes[j];
                 processes[j] = processes[j + 1];
                 processes[j + 1] = temp;
