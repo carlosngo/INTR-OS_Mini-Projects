@@ -1,4 +1,4 @@
-#include<stdio.h>
+#include <stdio.h>
 
 #define MAX_NUM_OF_PROCESSES 5
 
@@ -9,7 +9,7 @@ typedef struct {
 } process;
 
 
-void read_file(process list[]);
+void read_processes(process list[], int* q);
 void print_fcfs(process list[]);
 void print_sjf(process list[]);
 void print_srtf(process list[]);
@@ -17,13 +17,32 @@ void print_rr(process list[], int q);
 
 int
 main() {
-    
     process list[MAX_NUM_OF_PROCESSES];
-    read_file(list);
+    int q;
+    read_processes(list, &q);
     print_fcfs(list);
     print_sjf(list);
     print_srtf(list);
-    print_rr(list);
+    print_rr(list, q);
     return 0;
 }
 
+void read_processes(process list[], int* q) {
+
+}
+
+void print_fcfs(process list[]) {
+
+}
+
+void print_sjf(process list[]) {
+    
+}
+
+void print_srtf(process list[]) {
+    
+}
+
+void print_rr(process list[], int q) {
+    
+}
