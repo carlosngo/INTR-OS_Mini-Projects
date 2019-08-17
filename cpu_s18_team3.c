@@ -61,7 +61,8 @@ void print_fcfs(process list[], int numOfProcesses) {
     for (i = 0; i < numOfProcesses; i++) {
         processes[i] = list[i];
     }
-    fprintf(stdout, "*FCFS*\n");
+   // fprintf(stdout, "*FCFS*\n");
+    printf("*FCFS*\n");
     // Sort the processes according to time of arrival
     for (i = 0; i < numOfProcesses; i++){
         for (j = 0; j < (numOfProcesses); j++){
@@ -75,7 +76,8 @@ void print_fcfs(process list[], int numOfProcesses) {
     // Write the simulated execution order to the file
     for (i = 0; i < numOfProcesses; i++){
         for (j = 0; j < processes[i].remaining ; j++){
-             fprintf(stdout, "%c", processes[i].p_id);
+            // fprintf(stdout, "%c", processes[i].p_id);
+            printf("%c", processes[i].p_id);
         }
     }
     // Compute for the AWT
@@ -85,7 +87,8 @@ void print_fcfs(process list[], int numOfProcesses) {
         timeFinished[i] = timeFinished[i-1] + processes[i].remaining;
         waiting[i] = timeFinished[i-1] - processes[i].arrival;
     }
-    fprintf(stdout, "\nAWT = %llf\n\n", compute_avg(waiting, numOfProcesses));
+    //fprintf(stdout, "\nAWT = %llf\n\n", compute_avg(waiting, numOfProcesses));
+    printf("\nAWT = %llf\n\n", compute_avg(waiting, numOfProcesses));
 }
 
 void print_sjf(process list[], int numOfProcesses) {
