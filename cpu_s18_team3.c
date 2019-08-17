@@ -85,7 +85,7 @@ void print_fcfs(process list[], int numOfProcesses) {
         timeFinished[i] = timeFinished[i-1] + processes[i].remaining;
         waiting[i] = timeFinished[i-1] - processes[i].arrival;
     }
-    fprintf(stdout, "\nAWT = %llf\n\n", compute_avg(waiting, numOfProcesses));
+    fprintf(stdout, "\nAWT = %.2f\n\n", compute_avg(waiting, numOfProcesses));
 }
 
 void print_sjf(process list[], int numOfProcesses) {
