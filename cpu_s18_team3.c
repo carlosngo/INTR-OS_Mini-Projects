@@ -208,11 +208,15 @@ void print_rr(process list[], int q, int numOfProcesses) {
     			waiting[i] += time - processes[i].arrival;
 			}
 		}
-		retain = true;
-		dispatched = false;
-    	processes[i].remaining--;
+		if(!first_go){
+			retain = true;
+			dispatched = false;
+    		processes[i].remaining--;
+    		counter--;
+		}
+		
 		time++;
-		counter--;
+		
 		fprintf(out, "%c", processes[i].p_id); // prints the dispatched process
 		//the process has ended or q is finished
 		if(counter == 0 || processes[i].remaining == 0){
