@@ -1,5 +1,5 @@
 #include <stdio.h>
-
+#include <stdbool.h>
 #define MAX_NUM_OF_PROCESSES 5
 #define FALSE 0
 #define TRUE 1
@@ -160,7 +160,89 @@ void print_srtf(process list[], int numOfProcesses) {
 }
 
 void print_rr(process list[], int q, int numOfProcesses) {
-    
+	int holder;
+	bool retain = false;
+	bool finished = false;
+	bool checker = true;
+	bool dispatched;
+    int time = 0;
+    int counter;
+    int i = 0, j,k,l,m;
+    int waiting[MAX_NUM_OF_PROCESSES] = {0};
+    process temp;
+    // Copy contents of list to processes
+    process processes[MAX_NUM_OF_PROCESSES];
+    for (i = 0; i < numOfProcesses; i++) {
+        processes[i] = list[i];
+    }
+    // Sort the processes according to time of arrival
+    for (m = 0; m < numOfProcesses; m++){
+        for (j = 0; j < (numOfProcesses); j++){
+            if (processes[j].arrival > processes[j + 1].arrival){
+                temp = processes[j];
+                processes[j] = processes[j + 1];
+                processes[j + 1] = temp;
+            } 
+        }
+    }
+    fprintf(stdout, "*RR*\n");
+    i=0;
+    holder = i;
+    counter = q;
+    dispatched = true;
+    while(!finished){
+    	if(dispatched){
+    		if(retain == false){
+    			//fprintf(stdout, "%d-%d, ", time, processes[i].arrival); // prints the avg waiting calculations
+    			waiting[i] += time - processes[i].arrival;
+			}
+		}
+		retain = true;
+		dispatched = false;
+    	processes[i].remaining--;
+		time++;
+		counter--;
+		fprintf(stdout, "%c", processes[i].p_id); // prints the dispatched process
+		//the process has ended or q is finished
+		if(counter == 0 || processes[i].remaining == 0){
+			holder = i;//keeps track of previous process
+			finished = true;
+			checker = true;
+			counter = q;
+			// go on to next process
+			if(i+1 == numOfProcesses){
+				i = 0;
+			}else if(processes[i+1].arrival <= time){
+				i++;
+			}
+			
+			//check if next process still has remaining find if not
+			do{
+				if(processes[i].remaining > 0){
+					checker = false;
+					finished = false;
+				}else if(i+1 == numOfProcesses){
+					i = 0;
+				}else{
+					i++;
+				} 
+				
+				if(holder == i && processes[i].remaining <= 0){ //checks if it did not see any remaining process
+					i = -1;
+				}
+			}while(checker && (i != -1));
+			//dispatch the next process
+			if(finished == false){
+				dispatched = true;
+				if(holder != i){ //previous process maintains its past dispatch time if it did not get out of the process
+					retain = false;
+					processes[holder].arrival = time;
+				}
+			}
+		}
+		
+	}
+    fprintf(stdout, "\nAWT = %llf\n\n", compute_avg(waiting, numOfProcesses));
 }
 
 double compute_avg(int arr[], int n) {
