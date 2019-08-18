@@ -31,7 +31,7 @@ main() {
 }
 
 void read_processes(process list[], int* q, int* numOfProcesses) {
-    FILE *in = fopen("jobs.txt", "r");
+    FILE *in = fopen("jobs_s18_team3.txt", "r");
     char ch;
     
     while(fscanf(in, "%c", &ch)) {
@@ -52,6 +52,7 @@ Programmer: Johanna Lim, 11726008
 This function takes in the list of processes and writes the simulated execution order as well as the AWT in a file.
 */
 void print_fcfs(process list[], int numOfProcesses) {
+    FILE *out = fopen("jobs_s18_team3.txt", "a");
     int i, j, indexCtr;
     int timeFinished[MAX_NUM_OF_PROCESSES];
     int waiting[MAX_NUM_OF_PROCESSES];
@@ -61,7 +62,7 @@ void print_fcfs(process list[], int numOfProcesses) {
     for (i = 0; i < numOfProcesses; i++) {
         processes[i] = list[i];
     }
-    fprintf(stdout, "*FCFS*\n");
+    fprintf(out, "\n*FCFS*\n");
     // Sort the processes according to time of arrival
     for (i = 0; i < numOfProcesses-1; i++){
         for (j = 0; j < numOfProcesses-i-1; j++){
@@ -75,7 +76,7 @@ void print_fcfs(process list[], int numOfProcesses) {
     // Write the simulated execution order to the file
     for (i = 0; i < numOfProcesses; i++){
         for (j = 0; j < processes[i].remaining ; j++){
-             fprintf(stdout, "%c", processes[i].p_id);
+             fprintf(out, "%c", processes[i].p_id);
         }
     }
     // Compute for the AWT
@@ -85,10 +86,12 @@ void print_fcfs(process list[], int numOfProcesses) {
         timeFinished[i] = timeFinished[i-1] + processes[i].remaining;
         waiting[i] = timeFinished[i-1] - processes[i].arrival;
     }
-    fprintf(stdout, "\nAWT = %.2f\n\n", compute_avg(waiting, numOfProcesses));
+    fprintf(out, "\nAWT = %.2f\n\n", compute_avg(waiting, numOfProcesses));
+    fclose(out);
 }
 
 void print_sjf(process list[], int numOfProcesses) {
+    FILE *out = fopen("jobs_s18_team3.txt", "a");
     int time = 0;
     int i, j;
     int waiting[MAX_NUM_OF_PROCESSES] = {0};
@@ -97,7 +100,7 @@ void print_sjf(process list[], int numOfProcesses) {
     for (i = 0; i < numOfProcesses; i++) {
         processes[i] = list[i];
     }
-    fprintf(stdout, "*SJF*\n");
+    fprintf(out, "*SJF*\n");
     while (1) {
         char nextIndex = -1;
         int shortest = 1e9;
@@ -114,16 +117,17 @@ void print_sjf(process list[], int numOfProcesses) {
         if (finished) break;
         processes[nextIndex].remaining = 0;
         for (i = 0; i < shortest; i++) {
-            fprintf(stdout, "%c", processes[nextIndex].p_id);
+            fprintf(out, "%c", processes[nextIndex].p_id);
         }
         waiting[nextIndex] += time - processes[nextIndex].arrival;
         time += shortest;
     }
-    fprintf(stdout, "\nAWT = %.2f\n\n", compute_avg(waiting, numOfProcesses));
-    
+    fprintf(out, "\nAWT = %.2f\n\n", compute_avg(waiting, numOfProcesses));
+    fclose(out);
 }
 
 void print_srtf(process list[], int numOfProcesses) {
+    FILE *out = fopen("jobs_s18_team3.txt", "a");
     int time = 0;
     int i, j;
     process processes[MAX_NUM_OF_PROCESSES];
@@ -131,7 +135,7 @@ void print_srtf(process list[], int numOfProcesses) {
         processes[i] = list[i];
     }
     int waiting[MAX_NUM_OF_PROCESSES] = {0};
-    fprintf(stdout, "*SRTF*\n");
+    fprintf(out, "*SRTF*\n");
     while (1) {
         int nextIndex = -1;
         int shortest = 1e9;
@@ -147,16 +151,18 @@ void print_srtf(process list[], int numOfProcesses) {
         }
 
         if (finished) break;
-        fprintf(stdout, "%c", processes[nextIndex].p_id);
+        fprintf(out, "%c", processes[nextIndex].p_id);
         processes[nextIndex].remaining--;
         waiting[nextIndex] += time - processes[nextIndex].arrival;
         time++;
         processes[nextIndex].arrival = time;
     }
-    fprintf(stdout, "\nAWT = %.2f\n\n", compute_avg(waiting, numOfProcesses));
+    fprintf(out, "\nAWT = %.2f\n\n", compute_avg(waiting, numOfProcesses));
+    fclose(out);
 }
 
 void print_rr(process list[], int q, int numOfProcesses) {
+    FILE *out = fopen("jobs_s18_team3.txt", "a");
 	int holder;
 	bool retain = false;
 	bool finished = false;
@@ -182,7 +188,7 @@ void print_rr(process list[], int q, int numOfProcesses) {
             } 
         }
     }
-    fprintf(stdout, "*RR*\n");
+    fprintf(out, "*RR*\n");
     i=0;
     holder = i;
     counter = q;
@@ -190,7 +196,7 @@ void print_rr(process list[], int q, int numOfProcesses) {
     while(!finished){
     	if(dispatched){
     		if(retain == false){
-    			//fprintf(stdout, "%d-%d, ", time, processes[i].arrival); // prints the avg waiting calculations
+    			//fprintf(out, "%d-%d, ", time, processes[i].arrival); // prints the avg waiting calculations
     			waiting[i] += time - processes[i].arrival;
 			}
 		}
@@ -199,7 +205,7 @@ void print_rr(process list[], int q, int numOfProcesses) {
     	processes[i].remaining--;
 		time++;
 		counter--;
-		fprintf(stdout, "%c", processes[i].p_id); // prints the dispatched process
+		fprintf(out, "%c", processes[i].p_id); // prints the dispatched process
 		//the process has ended or q is finished
 		if(counter == 0 || processes[i].remaining == 0){
 			holder = i;//keeps track of previous process
@@ -239,7 +245,8 @@ void print_rr(process list[], int q, int numOfProcesses) {
 		}
 		
 	}
-    fprintf(stdout, "\nAWT = %.2f\n\n", compute_avg(waiting, numOfProcesses));
+    fprintf(out, "\nAWT = %.2f\n\n", compute_avg(waiting, numOfProcesses));
+    fclose(out);
 }
 
 double compute_avg(int arr[], int n) {
