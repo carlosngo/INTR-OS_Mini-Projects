@@ -157,6 +157,7 @@ void print_srtf(process list[], int numOfProcesses) {
 }
 
 void print_rr(process list[], int q, int numOfProcesses) {
+	bool first_go = true;
 	int holder;
 	bool retain = false;
 	bool finished = false;
@@ -186,8 +187,16 @@ void print_rr(process list[], int q, int numOfProcesses) {
     i=0;
     holder = i;
     counter = q;
-    dispatched = true;
+    dispatched = false;
     while(!finished){
+    	//assures that the first in queue is dispatched on time
+    	if(first_go){
+    		if(processes[0].arrival == time){
+    			first_go =false;
+    			dispatched = true;
+			}
+		}
+    	
     	if(dispatched){
     		if(retain == false){
     			//fprintf(stdout, "%d-%d, ", time, processes[i].arrival); // prints the avg waiting calculations
