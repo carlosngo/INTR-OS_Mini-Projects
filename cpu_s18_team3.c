@@ -162,7 +162,7 @@ void print_srtf(process list[], int numOfProcesses) {
 }
 
 void print_rr(process list[], int q, int numOfProcesses) {
-	bool first_go = true;
+    FILE *out = fopen("jobs_s18_team3.txt", "a");
 	int holder;
 	bool retain = false;
 	bool finished = false;
@@ -192,16 +192,8 @@ void print_rr(process list[], int q, int numOfProcesses) {
     i=0;
     holder = i;
     counter = q;
-    dispatched = false;
+    dispatched = true;
     while(!finished){
-    	//assures that the first in queue is dispatched on time
-    	if(first_go){
-    		if(processes[0].arrival == time){
-    			first_go =false;
-    			dispatched = true;
-			}
-		}
-    	
     	if(dispatched){
     		if(retain == false){
     			//fprintf(out, "%d-%d, ", time, processes[i].arrival); // prints the avg waiting calculations
