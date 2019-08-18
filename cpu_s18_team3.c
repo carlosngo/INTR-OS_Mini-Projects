@@ -62,10 +62,9 @@ void print_fcfs(process list[], int numOfProcesses) {
         processes[i] = list[i];
     }
     fprintf(stdout, "*FCFS*\n");
-    printf("*FCFS*\n");
     // Sort the processes according to time of arrival
-    for (i = 0; i < numOfProcesses; i++){
-        for (j = 0; j < (numOfProcesses)-i-1; j++){
+    for (i = 0; i < numOfProcesses-1; i++){
+        for (j = 0; j < numOfProcesses-i-1; j++){
             if (processes[j].arrival > processes[j + 1].arrival){
                 temp = processes[j];
                 processes[j] = processes[j + 1];
@@ -77,7 +76,6 @@ void print_fcfs(process list[], int numOfProcesses) {
     for (i = 0; i < numOfProcesses; i++){
         for (j = 0; j < processes[i].remaining ; j++){
              fprintf(stdout, "%c", processes[i].p_id);
-             printf("%c", processes[i].p_id);
         }
     }
     // Compute for the AWT
@@ -88,7 +86,6 @@ void print_fcfs(process list[], int numOfProcesses) {
         waiting[i] = timeFinished[i-1] - processes[i].arrival;
     }
     fprintf(stdout, "\nAWT = %.2f\n\n", compute_avg(waiting, numOfProcesses));
-    printf("\nAWT = %.2f\n\n", compute_avg(waiting, numOfProcesses));
 }
 
 void print_sjf(process list[], int numOfProcesses) {
@@ -122,7 +119,7 @@ void print_sjf(process list[], int numOfProcesses) {
         waiting[nextIndex] += time - processes[nextIndex].arrival;
         time += shortest;
     }
-    fprintf(stdout, "\nAWT = %llf\n\n", compute_avg(waiting, numOfProcesses));
+    fprintf(stdout, "\nAWT = %.2f\n\n", compute_avg(waiting, numOfProcesses));
     
 }
 
@@ -156,7 +153,7 @@ void print_srtf(process list[], int numOfProcesses) {
         time++;
         processes[nextIndex].arrival = time;
     }
-    fprintf(stdout, "\nAWT = %llf\n\n", compute_avg(waiting, numOfProcesses));
+    fprintf(stdout, "\nAWT = %.2f\n\n", compute_avg(waiting, numOfProcesses));
 }
 
 void print_rr(process list[], int q, int numOfProcesses) {
@@ -176,8 +173,8 @@ void print_rr(process list[], int q, int numOfProcesses) {
         processes[i] = list[i];
     }
     // Sort the processes according to time of arrival
-    for (m = 0; m < numOfProcesses; m++){
-        for (j = 0; j < (numOfProcesses); j++){
+    for (m = 0; m < numOfProcesses-1; m++){
+        for (j = 0; j < (numOfProcesses)-m-1; j++){
             if (processes[j].arrival > processes[j + 1].arrival){
                 temp = processes[j];
                 processes[j] = processes[j + 1];
@@ -242,7 +239,7 @@ void print_rr(process list[], int q, int numOfProcesses) {
 		}
 		
 	}
-    fprintf(stdout, "\nAWT = %llf\n\n", compute_avg(waiting, numOfProcesses));
+    fprintf(stdout, "\nAWT = %.2f\n\n", compute_avg(waiting, numOfProcesses));
 }
 
 double compute_avg(int arr[], int n) {
