@@ -158,6 +158,7 @@ void print_srtf(process list[], int numOfProcesses) {
 
 void print_rr(process list[], int q, int numOfProcesses) {
 	int holder;
+	bool retain = false;
 	bool finished = false;
 	bool checker = true;
 	bool dispatched;
@@ -188,42 +189,50 @@ void print_rr(process list[], int q, int numOfProcesses) {
     dispatched = true;
     while(!finished){
     	if(dispatched){
-    		waiting[i] += time - processes[i].arrival;
+    		if(retain == false){
+    			//fprintf(stdout, "%d-%d, ", time, processes[i].arrival); // prints the avg waiting calculations
+    			waiting[i] += time - processes[i].arrival;
+			}
 		}
+		retain = true;
 		dispatched = false;
     	processes[i].remaining--;
 		time++;
 		counter--;
+		fprintf(stdout, "%c", processes[i].p_id); // prints the dispatched process
 		//the process has ended or q is finished
 		if(counter == 0 || processes[i].remaining == 0){
-			//fprintf(stdout, "%c", processes[i].p_id);
 			holder = i;//keeps track of previous process
 			finished = true;
+			checker = true;
 			counter = q;
 			// go on to next process
 			if(i+1 == numOfProcesses){
 				i = 0;
-			}else if(processes[i+1].arrival <= time ){
+			}else if(processes[i+1].arrival <= time){
 				i++;
 			}
+			
 			//check if next process still has remaining find if not
 			do{
 				if(processes[i].remaining > 0){
 					checker = false;
 					finished = false;
-				}else if(holder == i){ //checks if it did not see any remaining process
-					i = -1;
 				}else if(i+1 == numOfProcesses){
 					i = 0;
 				}else{
 					i++;
+				} 
+				
+				if(holder == i && processes[i].remaining <= 0){ //checks if it did not see any remaining process
+					i = -1;
 				}
-			}while(checker && (i == -1));
-			fprintf(stdout, "%c", processes[i].p_id); // prints the dispatched process
+			}while(checker && (i != -1));
 			//dispatch the next process
 			if(finished == false){
 				dispatched = true;
 				if(holder != i){ //previous process maintains its past dispatch time if it did not get out of the process
+					retain = false;
 					processes[holder].arrival = time;
 				}
 			}
