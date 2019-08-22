@@ -23,6 +23,10 @@ main() {
     int q;
     int numOfProcesses = 0;
     read_processes(list, &q, &numOfProcesses);
+    if (numOfProcesses == 0) {
+        fprintf(stdout, "No processes inputted, exiting program...");
+        return 0;
+    }
     print_fcfs(list, numOfProcesses);
     print_sjf(list, numOfProcesses);
     print_srtf(list, numOfProcesses);
