@@ -105,16 +105,23 @@ void print_sjf(process list[], int numOfProcesses) {
         char nextIndex = -1;
         int shortest = 1e9;
         int finished = TRUE;
+        int found = FALSE;
         for (i = 0; i < numOfProcesses; i++) { // classic find min
             if (processes[i].remaining > 0) {
                 finished = FALSE; // found a process that's in the queue
                 if (processes[i].arrival <= time && processes[i].remaining < shortest) {
+                    found = TRUE;
                     nextIndex = i;
                     shortest = processes[i].remaining;
                 }
             }
         }
         if (finished) break;
+        if (!found) {
+            fprintf(out, "_");
+            time++;
+            continue;
+        }
         processes[nextIndex].remaining = 0;
         for (i = 0; i < shortest; i++) {
             fprintf(out, "%c", processes[nextIndex].p_id);
@@ -140,10 +147,12 @@ void print_srtf(process list[], int numOfProcesses) {
         int nextIndex = -1;
         int shortest = 1e9;
         int finished = TRUE;
+        int found = FALSE;
         for (i = 0; i < numOfProcesses; i++) { // classic find min
             if (processes[i].remaining > 0) {
                 finished = FALSE;
                 if (processes[i].arrival <= time && processes[i].remaining < shortest) {
+                    found = TRUE;
                     nextIndex = i;
                     shortest = processes[i].remaining;
                 }
@@ -151,6 +160,11 @@ void print_srtf(process list[], int numOfProcesses) {
         }
 
         if (finished) break;
+        if (!found) {
+            fprintf(out, "_");
+            time++;
+            continue;
+        }
         fprintf(out, "%c", processes[nextIndex].p_id);
         processes[nextIndex].remaining--;
         waiting[nextIndex] += time - processes[nextIndex].arrival;
