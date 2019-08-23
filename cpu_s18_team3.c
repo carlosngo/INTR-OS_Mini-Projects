@@ -1,3 +1,12 @@
+/*	
+	Filename: cpu_s18_team3
+	Programmed by: Lim, Johanna
+				   Ngo, Carlos
+				   Quiachon, Jan Ren
+	Last Modified: August 23, 2019
+	Function/Purpose/Use: This program outputs simulations of the orders of executions of several processes using FCFS, SJF, SRTF, and RR algorithms  	
+*/
+
 #include <stdio.h>
 #include <stdbool.h>
 #define MAX_NUM_OF_PROCESSES 5
@@ -34,6 +43,12 @@ main() {
     return 0;
 }
 
+/*
+Function: This function gets the processes from the file
+Parameters: list - the list of process structures
+		    numOfProcesses - the total number of processes
+		    q - the quantum used for thr RR
+*/
 void read_processes(process list[], int* q, int* numOfProcesses) {
     FILE *in = fopen("jobs_s18_team3.txt", "r");
     char ch;
@@ -51,7 +66,11 @@ void read_processes(process list[], int* q, int* numOfProcesses) {
     fclose(in);
 }
 
-// This function prints the order of execution using FCFS to the file
+/*
+Function: This function prints the order of execution using FCFS to the file
+Parameters: list - the list of process structures
+		    numOfProcesses - the total number of processes
+*/
 void print_fcfs(process list[], int numOfProcesses) {
     FILE *out = fopen("jobs_s18_team3.txt", "a");
     int i, j;
@@ -104,7 +123,11 @@ void print_fcfs(process list[], int numOfProcesses) {
     fclose(out);
 }
 
-// This function prints the order of execution using SJF to the file
+/*
+Function: This function prints the order of execution using SJF to the file
+Parameters: list - the list of process structures
+		    numOfProcesses - the total number of processes
+*/
 void print_sjf(process list[], int numOfProcesses) {
     FILE *out = fopen("jobs_s18_team3.txt", "a");
     int time = 0;
@@ -148,7 +171,11 @@ void print_sjf(process list[], int numOfProcesses) {
     fclose(out);
 }
 
-// This function prints the order of execution using SRTF to the file
+/*
+Function: This function prints the order of execution using SRTF to the file
+Parameters: list - the list of process structures
+		    numOfProcesses - the total number of processes
+*/
 void print_srtf(process list[], int numOfProcesses) {
     FILE *out = fopen("jobs_s18_team3.txt", "a");
     int time = 0;
@@ -191,7 +218,11 @@ void print_srtf(process list[], int numOfProcesses) {
     fclose(out);
 }
 
-// This function prints the order of execution using RR to the file
+/*
+Function: This function prints the order of execution using RR to the file
+Parameters: list - the list of process structures
+		    numOfProcesses - the total number of processes
+*/
 void print_rr(process list[], int q, int numOfProcesses) {
     FILE *out = fopen("jobs_s18_team3.txt", "a");
 	int holder;
@@ -314,7 +345,11 @@ void print_rr(process list[], int q, int numOfProcesses) {
     fclose(out);
 }
 
-// This funciton computes for the average of the numbers in the array "arr"
+/*
+Function: This funciton computes for the average of the numbers in the array "arr"
+Parameters: arr - the list of waiting times
+		    n - the total number of processes
+*/
 double compute_avg(int arr[], int n) {
     double avg = 0;
     int i;
