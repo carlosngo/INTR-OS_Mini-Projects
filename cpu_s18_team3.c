@@ -51,10 +51,6 @@ void read_processes(process list[], int* q, int* numOfProcesses) {
     fclose(in);
 }
 
-/*
-Programmer: Johanna Lim, 11726008
-This function takes in the list of processes and writes the simulated execution order as well as the AWT in a file.
-*/
 void print_fcfs(process list[], int numOfProcesses) {
     FILE *out = fopen("jobs_s18_team3.txt", "a");
     int i, j, indexCtr;
