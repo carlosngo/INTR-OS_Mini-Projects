@@ -51,13 +51,14 @@ void read_processes(process list[], int* q, int* numOfProcesses) {
     fclose(in);
 }
 
+// This function prints the order of execution using FCFS to the file
 void print_fcfs(process list[], int numOfProcesses) {
     FILE *out = fopen("jobs_s18_team3.txt", "a");
     int i, j;
     int timeFinished[MAX_NUM_OF_PROCESSES];
     int waiting[MAX_NUM_OF_PROCESSES];
     process temp;
-    // Copy contents of list to processes
+    // make a copy of the contents of the "list"
     process processes[MAX_NUM_OF_PROCESSES];
     for (i = 0; i < numOfProcesses; i++) {
         processes[i] = list[i];
@@ -73,35 +74,37 @@ void print_fcfs(process list[], int numOfProcesses) {
             } 
         }
     }
-    // Write the simulated execution order to the file
+    // preparation for the loop for writing to file
     if(processes[0].arrival>0){
         for(i=0;i<processes[0].arrival;i++){
-            fprintf(out, "_");
+            fprintf(out, "_"); //output "_" if the first process does not arrive at time 0
         }
     }
     for(i=0;i<processes[0].remaining;i++){
-        fprintf(out, "%c", processes[0].p_id);
+        fprintf(out, "%c", processes[0].p_id); // output the first process first
     }
     timeFinished[0] = processes[0].arrival + processes[0].remaining;
     waiting[0] = 0;
+    //begin loop in writing to file
     for (i = 1; i < numOfProcesses; i++){
         timeFinished[i] = timeFinished[i-1] + processes[i].remaining;
         if(timeFinished[i-1]<processes[i].arrival){
-            waiting[i] = 0; 
+            waiting[i] = 0; // the process coming after the break in the middle of the sequence have 0 waiting time
             for (j = 0; j < (processes[i].arrival - timeFinished[i-1]) ; j++){
-                fprintf(out, "_");
+                fprintf(out, "_"); //print "_" if there is no process running in the middle of the processes
             }   
         } else{
             waiting[i] = timeFinished[i-1] - processes[i].arrival;
         }
         for (j = 0; j < processes[i].remaining ; j++){
-             fprintf(out, "%c", processes[i].p_id);
+             fprintf(out, "%c", processes[i].p_id); // continue printing each of the processes
         }
     }
-    fprintf(out, "\nAWT = %.2f\n\n", compute_avg(waiting, numOfProcesses));
+    fprintf(out, "\nAWT = %.2f\n\n", compute_avg(waiting, numOfProcesses)); //get the AWT
     fclose(out);
 }
 
+// This function prints the order of execution using SJF to the file
 void print_sjf(process list[], int numOfProcesses) {
     FILE *out = fopen("jobs_s18_team3.txt", "a");
     int time = 0;
@@ -145,6 +148,7 @@ void print_sjf(process list[], int numOfProcesses) {
     fclose(out);
 }
 
+// This function prints the order of execution using SRTF to the file
 void print_srtf(process list[], int numOfProcesses) {
     FILE *out = fopen("jobs_s18_team3.txt", "a");
     int time = 0;
@@ -187,6 +191,7 @@ void print_srtf(process list[], int numOfProcesses) {
     fclose(out);
 }
 
+// This function prints the order of execution using RR to the file
 void print_rr(process list[], int q, int numOfProcesses) {
     FILE *out = fopen("jobs_s18_team3.txt", "a");
 	int holder;
@@ -308,6 +313,7 @@ void print_rr(process list[], int q, int numOfProcesses) {
     fclose(out);
 }
 
+// This funciton computes for the average of the numbers in the array "arr"
 double compute_avg(int arr[], int n) {
     double avg = 0;
     int i;
