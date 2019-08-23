@@ -213,7 +213,7 @@ void print_rr(process list[], int q, int numOfProcesses) {
     holder = i;
     counter = q;
     running = false;
-    spinlock = false;
+    spinlock = true;
     dispatched = false;
     while(!finished){
     	//assures that the first in queue is dispatched on time
@@ -222,6 +222,7 @@ void print_rr(process list[], int q, int numOfProcesses) {
                 first_go = false;
                 dispatched = true;
                 running = true;
+                spinlock = false;
             }
         }
     	if(dispatched){
