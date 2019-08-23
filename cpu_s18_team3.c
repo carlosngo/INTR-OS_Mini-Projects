@@ -183,7 +183,7 @@ void print_rr(process list[], int q, int numOfProcesses) {
     FILE *out = fopen("jobs_s18_team3.txt", "a");
 	int holder;
 	bool first_go = true;
-	bool running;
+	bool running, spinlock;
 	bool retain = false;
 	bool finished = false;
 	bool checker = true;
@@ -213,6 +213,7 @@ void print_rr(process list[], int q, int numOfProcesses) {
     holder = i;
     counter = q;
     running = false;
+    spinlock = false;
     dispatched = false;
     while(!finished){
     	//assures that the first in queue is dispatched on time
@@ -235,13 +236,16 @@ void print_rr(process list[], int q, int numOfProcesses) {
 			dispatched = false;
     		processes[i].remaining--;
     		counter--;
+    		fprintf(out, "%c", processes[i].p_id); // prints the dispatched process
+		}
+		if(spinlock){
+			fprintf(out, "_"); // spin if busy waiting
 		}
 		
 		time++;
 		
-		fprintf(out, "%c", processes[i].p_id); // prints the dispatched process
-		//the process has ended or q is finished
-		if(counter == 0 || processes[i].remaining == 0){
+		//the process has ended or q is finished or spinlock is done
+		if(counter == 0 || processes[i].remaining == 0 || (processes[i].arrival <= time && !first_go && spinlock)){
 			holder = i;//keeps track of previous process
 			finished = true;
 			running = false;
@@ -256,9 +260,10 @@ void print_rr(process list[], int q, int numOfProcesses) {
 			
 			//check if next process still has remaining find if not
 			do{
-				if(processes[i].remaining > 0){
+				if(processes[i].remaining > 0 && processes[i].arrival <= time){
 					checker = false;
 					finished = false;
+					spinlock = false; //no spinlock needed
 				}else if(i+1 == numOfProcesses){
 					i = 0;
 				}else{
@@ -266,11 +271,21 @@ void print_rr(process list[], int q, int numOfProcesses) {
 				} 
 				
 				if(holder == i && processes[i].remaining <= 0){ //checks if it did not see any remaining process
-					i = -1;
+					//double check if there are processes that didnt arrive yet
+					for(k = 0; k < numOfProcesses; k++){
+						if(processes[k].remaining > 0){
+							checker = false;
+							finished = false;
+							spinlock = true; // spinlock because no process have arrived yet
+						}
+					}
+					if(checker && finished){
+						i = -1;
+					}
 				}
 			}while(checker && (i != -1));
 			//dispatch the next process if the process is on time
-			if(finished == false && processes[i].arrival <= time){
+			if(finished == false && !spinlock){
 				running = true;
 				dispatched = true;
 				if(holder != i){ //previous process maintains its past dispatch time if it did not get out of the process
@@ -279,7 +294,7 @@ void print_rr(process list[], int q, int numOfProcesses) {
 				}
 			}
 		}
-		
+	
 	}
     fprintf(out, "\nAWT = %.2f\n\n", compute_avg(waiting, numOfProcesses));
     fclose(out);
