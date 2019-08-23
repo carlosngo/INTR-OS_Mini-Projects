@@ -78,17 +78,29 @@ void print_fcfs(process list[], int numOfProcesses) {
         }
     }
     // Write the simulated execution order to the file
-    for (i = 0; i < numOfProcesses; i++){
-        for (j = 0; j < processes[i].remaining ; j++){
-             fprintf(out, "%c", processes[i].p_id);
+    if(processes[0].arrival>0){
+        for(i=0;i<processes[0].arrival;i++){
+            fprintf(out, "_");
         }
     }
-    // Compute for the AWT
+    for(i=0;i<processes[0].remaining;i++){
+        fprintf(out, "%c", processes[i].p_id);
+    }
     timeFinished[0] = processes[0].arrival + processes[0].remaining;
     waiting[0] = 0;
     for (i = 1; i < numOfProcesses; i++){
         timeFinished[i] = timeFinished[i-1] + processes[i].remaining;
-        waiting[i] = timeFinished[i-1] - processes[i].arrival;
+        if(timeFinished[i-1]<processes[i].arrival){
+            waiting[i] = 0; 
+            for (j = 0; j < (processes[i].arrival - timeFinished[i-1]) ; j++){
+                fprintf(out, "_");
+            }   
+        } else{
+            waiting[i] = timeFinished[i-1] - processes[i].arrival;
+        }
+        for (j = 0; j < processes[i].remaining ; j++){
+             fprintf(out, "%c", processes[i].p_id);
+        }
     }
     fprintf(out, "\nAWT = %.2f\n\n", compute_avg(waiting, numOfProcesses));
     fclose(out);
