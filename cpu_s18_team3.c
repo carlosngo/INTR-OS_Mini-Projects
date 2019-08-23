@@ -165,6 +165,7 @@ void print_rr(process list[], int q, int numOfProcesses) {
     FILE *out = fopen("jobs_s18_team3.txt", "a");
 	int holder;
 	bool first_go = true;
+	bool running;
 	bool retain = false;
 	bool finished = false;
 	bool checker = true;
@@ -193,13 +194,15 @@ void print_rr(process list[], int q, int numOfProcesses) {
     i=0;
     holder = i;
     counter = q;
+    running = false;
     dispatched = false;
     while(!finished){
     	//assures that the first in queue is dispatched on time
         if(first_go){
             if(processes[0].arrival == time){
-                first_go =false;
+                first_go = false;
                 dispatched = true;
+                running = true;
             }
         }
     	if(dispatched){
@@ -208,7 +211,8 @@ void print_rr(process list[], int q, int numOfProcesses) {
     			waiting[i] += time - processes[i].arrival;
 			}
 		}
-		if(!first_go){
+		// if there is a processs running
+		if(!first_go && running){
 			retain = true;
 			dispatched = false;
     		processes[i].remaining--;
@@ -222,6 +226,7 @@ void print_rr(process list[], int q, int numOfProcesses) {
 		if(counter == 0 || processes[i].remaining == 0){
 			holder = i;//keeps track of previous process
 			finished = true;
+			running = false;
 			checker = true;
 			counter = q;
 			// go on to next process
@@ -246,8 +251,9 @@ void print_rr(process list[], int q, int numOfProcesses) {
 					i = -1;
 				}
 			}while(checker && (i != -1));
-			//dispatch the next process
-			if(finished == false){
+			//dispatch the next process if the process is on time
+			if(finished == false && processes[i].arrival <= time){
+				running = true;
 				dispatched = true;
 				if(holder != i){ //previous process maintains its past dispatch time if it did not get out of the process
 					retain = false;
