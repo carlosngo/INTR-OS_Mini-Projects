@@ -53,7 +53,7 @@ void read_processes(process list[], int* q, int* numOfProcesses) {
 
 void print_fcfs(process list[], int numOfProcesses) {
     FILE *out = fopen("jobs_s18_team3.txt", "a");
-    int i, j, indexCtr;
+    int i, j;
     int timeFinished[MAX_NUM_OF_PROCESSES];
     int waiting[MAX_NUM_OF_PROCESSES];
     process temp;
