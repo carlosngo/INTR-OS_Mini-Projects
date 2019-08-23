@@ -80,7 +80,7 @@ void print_fcfs(process list[], int numOfProcesses) {
         }
     }
     for(i=0;i<processes[0].remaining;i++){
-        fprintf(out, "%c", processes[i].p_id);
+        fprintf(out, "%c", processes[0].p_id);
     }
     timeFinished[0] = processes[0].arrival + processes[0].remaining;
     waiting[0] = 0;
